@@ -25,9 +25,16 @@ export default {
     }
   },
   methods: {
-    deleteSmoothie(id){
-      this.smoothies = this.smoothies.filter(smoothie => {
-        return smoothie.id != id
+  deleteSmoothie(id){
+      // delete doc from firestore
+      console.log(id)
+      db.collection('smoothies').doc(id).delete()
+      .then(() => {
+        this.smoothies = this.smoothies.filter(smoothie => {
+          return smoothie.id != id
+        })
+      }).catch(err => {
+        console.log(err)
       })
     }
   },
