@@ -9,6 +9,7 @@
       <div v-for="(ing, index) in ingredients" class="field ingredient" :key="index">
         <label for="ingredient">Ingredient:</label>
         <input type="text" name="ingredient" v-model="ingredients[index]">
+         <i class="material-icons delete" @click="deleteIng(ing)">delete</i>
       </div>
       <div class="field add-ingredient">
         <label for="add-ingredient">Add an ingredient (press tab to add):</label>
@@ -23,6 +24,8 @@
 </template>
 
 <script>
+import db from '@/firebase/init'
+import slugify from 'slugify'
 export default {
   name: 'AddSmoothie',
   data(){
@@ -30,12 +33,33 @@ export default {
       title: null,
       ingredients: [],
       another: null,
-      feedback: null
+      feedback: null,
+      slug: null
     }
   },
   methods: {
     addSmoothie(){
-      console.log(this.title, this.ingredients)
+      if(this.title){
+        this.feedback = null
+        // create a slug
+        this.slug = slugify(this.title, {
+          replacement: '-',
+          remove: /[$*_+~.()'"!\-:@]/g,
+          lower: true
+        })
+        //save smoothie to firestore
+        db.collection('smoothies').add({
+          title: this.title,
+          ingredients: this.ingredients,
+          slug: this.slug
+        }).then(() => {
+          this.$router.push({ name: 'Index' })
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        this.feedback = 'You must enter a smoothie title'
+      }
     },
     addIng(){
       if(this.another){
@@ -43,8 +67,13 @@ export default {
         this.another = null
         this.feedback = null
       } else {
-        this.feedback = 'You must enter a value to add an ingredient'
+        this.feedback = 'You must enter a value to add another ingredient'
       }
+    },
+    deleteIng(ing){
+      this.ingredients = this.ingredients.filter(ingredient => {
+        return ingredient != ing
+      })
     }
   }
 }
@@ -62,5 +91,14 @@ export default {
 }
 .add-smoothie .field{
   margin: 20px auto;
+  position: relative;
+}
+.add-smoothie .delete{
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  color: #aaa;
+  font-size: 1.4em;
+  cursor: pointer;
 }
 </style>
