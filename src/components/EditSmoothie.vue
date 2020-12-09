@@ -12,8 +12,9 @@
         <i class="material-icons delete" @click="deleteIng(ing)">delete</i>
       </div>
       <div class="field add-ingredient">
-        <label for="add-ingredient">Add an ingredient (press tab to add):</label>
-        <input type="text" name="add-ingredient" @keydown.tab.prevent="addIng" v-model="another">
+        <label for="add-ingredient">Add an ingredient</label>
+        <input type="text" name="add-ingredient" v-model="another">
+        <i class="material-icons add" @click="addIng()">check_circle</i>
       </div>
       <div class="field center-align">
         <p v-if="feedback" class="red-text">{{ feedback }}</p>
@@ -103,6 +104,14 @@ export default {
   position: relative;
 }
 .edit-smoothie .delete{
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  color: #aaa;
+  font-size: 1.4em;
+  cursor: pointer;
+}
+.edit-smoothie .add{
   position: absolute;
   right: 0;
   bottom: 16px;
