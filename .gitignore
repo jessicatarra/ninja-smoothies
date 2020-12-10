@@ -15,3 +15,9 @@ yarn-error.log*
 
 # Firebase 
 /src/firebase
+.firebase/
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+database.rules.json
