@@ -4,7 +4,7 @@ describe('Ninja Smoothies Test', () => {
   it('Editing Smoothie Ingredientes', () => {
     //visiting home page
     cy.visit('/')
-
+    cy.wait(5000)
     //click edit smoothie button
     cy.get('.index > :nth-child(1) > .btn-floating').click()
 
